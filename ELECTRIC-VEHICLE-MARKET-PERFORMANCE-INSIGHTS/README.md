@@ -1,27 +1,70 @@
-# Electric Vehicle Market Performance Insights
+# ⚡ Electric Vehicle Market Performance Insights
 
-This folder contains the files supplied in the original GitHub ZIP, arranged as a VS Code-ready project.
+An interactive data analytics project built using **Tableau Public** to explore and understand the growth, adoption, and market performance of Electric Vehicles (EVs).
 
-## Run the website
+## 📌 Project Overview
 
-1. Open this folder in Visual Studio Code (`File → Open Folder`).
-2. Open `index.html` in a browser, or use the **Live Server** extension and choose **Open with Live Server**.
-3. The dashboard and story views are embedded from Tableau Public, so an internet connection is required for those visualisations.
+The Electric Vehicle Market Performance Insights project focuses on analyzing EV market data through interactive visualizations and dashboards. It provides insights into market trends, vehicle distribution, performance indicators, and the evolving electric mobility landscape.
 
-## Main website file
+The project combines Tableau dashboards with a responsive HTML website to present analytical findings in an accessible and visually engaging format.
 
-- `index.html` — website entry point. Its CSS is embedded in the `<style>` section and its JavaScript is embedded in the `<script>` section, so separate CSS or JS files are not required by this version.
+## 🎯 Project Objectives
 
-## Tableau workbook
+* Analyze electric vehicle market trends and performance.
+* Explore EV adoption and distribution patterns.
+* Identify meaningful insights through interactive visualizations.
+* Present data-driven findings using Tableau dashboards and stories.
+* Create a simple, user-friendly platform to explore the analysis.
 
-- `EV_MARKET_Performance_Insights.twbx` — packaged Tableau workbook. Open it with Tableau Desktop or Tableau Reader if supported by your installation.
+## 🛠️ Technologies Used
 
-## Project documentation
+* **Tableau Public** – Data visualization and dashboard development.
+* **HTML5** – Website structure.
+* **CSS3** – Styling and responsive layout.
+* **JavaScript** – Interactive website elements.
+* **Git & GitHub** – Version control and project hosting.
 
-The numbered folders contain the supplied ideation, requirements, design, planning, development, testing, documentation, and demonstration materials. Original filenames and folder structure have been preserved.
+## 📊 Project Visualizations
 
-## Notes
+The project includes:
 
-- No separate `css/`, `js/`, or image-assets folder was present in the supplied archive.
-- The website links to the published Tableau dashboard and two Tableau stories. Editing the local HTML does not edit the Tableau workbook or its published views.
-- No build step or package installation is needed for the static website.
+* An interactive Tableau dashboard.
+* A Tableau data story highlighting key market insights.
+* An integrated website for accessing the visualizations.
+
+## 🔗 Live Project Links
+
+**Tableau Dashboard:**
+[Explore Dashboard](https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Dashboard1)
+
+**Tableau Story:**
+[Explore Data Story](https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Story1?publish=yes)
+
+## 💻 Run the Website Locally
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/oshvipatidar/Electric-Vehicle-Market-Performance-Insights---Tableau-Project.git
+   ```
+
+2. Open the project folder.
+
+3. Open `index.html` in your browser.
+
+4. Ensure you have an active internet connection to load the embedded Tableau visualizations.
+
+## 📄 Project Documentation
+
+Detailed project documentation is available in the `documentation` folder.
+
+It includes the project report, analysis details, methodology, and supporting documentation in PDF and DOCX formats.
+
+## 🌱 Key Takeaway
+
+This project demonstrates how data visualization can transform raw market information into meaningful insights, helping users explore the changing landscape of electric mobility.
+
+---
+
+**Developed by Oshvi Patidar**
+B.Tech – Computer Science and Engineering
