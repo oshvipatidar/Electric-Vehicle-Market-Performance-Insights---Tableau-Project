@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Electric Vehicle Market Performance Insights — an interactive Tableau dashboard and a supporting data story.">
+  <meta name="theme-color" content="#071b25">
+  <title>EV Market Performance Insights</title>
+  <style>
+    :root {
+      --bg:#071b25; --panel:#102b36; --panel2:#133642; --ink:#eef8f7;
+      --muted:#a9c1c3; --mint:#65e0bf; --line:rgba(205,239,233,.14);
+      --gold:#f2c879; --shadow:0 18px 50px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(ellipse at 80% 0%,#17424a 0%,transparent 38%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+    a{color:inherit}
+    .wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+    header{padding:22px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(7,27,37,.88);backdrop-filter:blur(14px);z-index:10}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em}
+    .mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--mint),#9cf2d6);display:grid;place-items:center;color:#06242a;font-size:19px}
+    nav{display:flex;gap:22px;flex-wrap:wrap}
+    nav a{text-decoration:none;color:var(--muted);font-size:14px}
+    nav a:hover{color:var(--mint)}
+    .hero{padding:82px 0 58px;display:grid;grid-template-columns:1.2fr .8fr;gap:42px;align-items:center}
+    .eyebrow{color:var(--mint);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+    h1{font-size:clamp(38px,6vw,68px);line-height:1.04;letter-spacing:-.045em;margin:16px 0 20px;max-width:760px}
+    .lead{font-size:18px;color:var(--muted);max-width:650px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:750;font-size:14px;border:1px solid var(--line);transition:.2s}
+    .btn.primary{background:var(--mint);color:#06242a;border-color:var(--mint)}
+    .btn:hover{transform:translateY(-2px)}
+    .hero-card{border:1px solid var(--line);border-radius:24px;padding:26px;background:linear-gradient(145deg,rgba(101,224,191,.13),rgba(16,43,54,.92));box-shadow:var(--shadow)}
+    .hero-card .big{font-size:54px;font-weight:850;letter-spacing:-.05em;color:var(--mint);line-height:1}
+    .hero-card p{color:var(--muted);margin:10px 0 0}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:25px}
+    .mini{padding:15px;border:1px solid var(--line);border-radius:14px;background:rgba(4,19,27,.25)}
+    .mini strong{display:block;font-size:19px}.mini span{color:var(--muted);font-size:12px}
+    section{padding:48px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:22px}
+    h2{font-size:clamp(27px,4vw,38px);letter-spacing:-.035em;margin:7px 0}
+    .sub{color:var(--muted);max-width:690px;margin:0}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 14px}
+    .tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:11px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:700}
+    .tab[aria-selected="true"]{background:var(--mint);color:#06242a;border-color:var(--mint)}
+    .viewer{background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.12)}
+    .viewer-top{background:#f2f6f6;color:#19323a;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px}
+    .viewer-top a{color:#126c60;font-weight:750;text-decoration:none}
+    .frame-wrap{position:relative;width:100%;height:760px;background:#f5f7f7}
+    iframe{width:100%;height:100%;border:0}
+    .note{color:var(--muted);font-size:13px;margin:12px 2px 0}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:22px}
+    .num{color:var(--mint);font-size:12px;font-weight:850;letter-spacing:.14em}
+    .card h3{margin:9px 0 8px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px}
+    .method{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:steps}
+    .step{border-top:2px solid var(--mint);padding:16px 14px;background:rgba(16,43,54,.7);border-radius:0 0 14px 14px}
+    .step b{display:block;margin-bottom:5px}.step span{font-size:13px;color:var(--muted)}
+    .cta{padding:28px;border:1px solid rgba(101,224,191,.25);border-radius:22px;background:linear-gradient(120deg,rgba(101,224,191,.12),rgba(19,54,66,.7));display:flex;justify-content:space-between;align-items:center;gap:22px}
+    footer{padding:28px 0 42px;color:var(--muted);border-top:1px solid var(--line);font-size:13px;margin-top:40px}
+    @media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:55px}.cards{grid-template-columns:1fr 1fr}.method{grid-template-columns:1fr 1fr}.frame-wrap{height:620px}.section-head{display:block}}
+    @media(max-width:540px){.wrap{width:min(100% - 28px,1160px)}nav{gap:12px}.nav{align-items:flex-start;flex-direction:column}.cards,.method{grid-template-columns:1fr}.frame-wrap{height:560px}.cta{display:block}.hero-card .big{font-size:46px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="mark">⚡</span><span>EV MARKET INSIGHTS</span></div>
+    <nav aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#explore">Explore</a>
+      <a href="#visuals">Analysis</a>
+      <a href="#method">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero" id="overview">
+    <div>
+      <div class="eyebrow">Data analytics · Tableau project</div>
+      <h1>Electric Vehicle Market <span style="color:var(--mint)">Performance Insights</span></h1>
+      <p class="lead">An interactive exploration of the electric vehicle market through manufacturer performance, battery technology, vehicle specifications and customer insights.</p>
+      <div class="actions">
+        <a class="btn primary" href="#explore">Explore the visualisations ↓</a>
+        <a class="btn" href="https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Dashboard1" target="_blank" rel="noopener">Open on Tableau Public ↗</a>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <div class="eyebrow">Project snapshot</div>
+      <div class="big">08</div>
+      <p>Visualisations brought together in an interactive Tableau dashboard and a supporting data story.</p>
+      <div class="mini-grid">
+        <div class="mini"><strong>01</strong><span>Interactive dashboard</span></div>
+        <div class="mini"><strong>01</strong><span>Tableau story</span></div>
+        <div class="mini"><strong>08</strong><span>Visualisations</span></div>
+        <div class="mini"><strong>EV</strong><span>Market analysis</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="wrap" id="explore">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Interactive Tableau</div>
+        <h2>Explore the project</h2>
+        <p class="sub">Switch between the main dashboard and its supporting story presentation. Use the full-screen option in Tableau for a larger view.</p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Tableau project views">
+      <button class="tab" role="tab" id="tab-dashboard" aria-controls="tableau-frame" aria-selected="true" data-view="dashboard">Main Dashboard</button>
+      <button class="tab" role="tab" id="tab-story1" aria-controls="tableau-frame" aria-selected="false" data-view="story1">Story 1 · Market Overview</button>
+    </div>
+
+    <div class="viewer">
+      <div class="viewer-top">
+        <strong id="view-title">My EV Market Analysis Dashboard</strong>
+        <a id="open-view" href="https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Dashboard1" target="_blank" rel="noopener">Open this view on Tableau ↗</a>
+      </div>
+      <div class="frame-wrap">
+        <iframe id="tableau-frame" title="My EV Market Analysis Dashboard Tableau visualisation" src="https://public.tableau.com/views/EV_Market_analysis_Dashboard/Dashboard1?:showVizHome=no&:embed=true" allowfullscreen></iframe>
+      </div>
+    </div>
+    <p class="note">If the embedded view does not load in your browser, use “Open this view on Tableau”. The interactive content is hosted by Tableau Public.</p>
+  </section>
+
+  <section class="wrap" id="visuals">
+    <div class="eyebrow">What the analysis covers</div>
+    <h2>Eight analytical perspectives</h2>
+    <p class="sub" style="margin-bottom:22px">The dashboard contains eight analytical worksheets that explore the dataset from manufacturer, technology, geography, time, range and customer perspectives.</p>
+    <div class="cards">
+      <article class="card"><div class="num">01 / MANUFACTURERS</div><h3>Manufacturer sales performance</h3><p>Compare manufacturers using the annual-sales measure included in the analysis.</p></article>
+      <article class="card"><div class="num">02 / TECHNOLOGY</div><h3>Battery technology distribution</h3><p>Explore how the vehicle records are distributed across battery technologies.</p></article>
+      <article class="card"><div class="num">03 / GEOGRAPHY</div><h3>Manufacturing country analysis</h3><p>Review the countries represented in the electric-vehicle dataset.</p></article>
+      <article class="card"><div class="num">04 / TIME</div><h3>EV sales by model year</h3><p>Explore the annual pattern across model years represented in the data.</p></article>
+      <article class="card"><div class="num">05 / RANGE</div><h3>Driving range comparison</h3><p>Compare average driving-range performance across manufacturers.</p></article>
+      <article class="card"><div class="num">06 / BATTERY</div><h3>Battery capacity and driving range</h3><p>Investigate the relationship between battery capacity and vehicle range.</p></article>
+      <article class="card"><div class="num">07 / CUSTOMER</div><h3>Customer satisfaction</h3><p>Explore the customer-rating measure across manufacturers.</p></article>
+      <article class="card"><div class="num">08 / BATTERY</div><h3>Battery capacity by technology</h3><p>Compare average battery capacity across battery technology types.</p></article>
+    </div>
+  </section>
+
+  <section class="wrap" id="method">
+    <div class="eyebrow">Project workflow</div>
+    <h2>From dataset to insights</h2>
+    <p class="sub" style="margin-bottom:22px">A clear, reproducible workflow for turning the source dataset into an interactive analysis.</p>
+    <div class="method">
+      <div class="step"><b>1. Understand</b><span>Review the project brief, scenarios, questions and dataset fields.</span></div>
+      <div class="step"><b>2. Prepare</b><span>Inspect the data and identify the measures and dimensions required.</span></div>
+      <div class="step"><b>3. Visualise</b><span>Build the Tableau worksheets, dashboard and supporting story.</span></div>
+      <div class="step"><b>4. Communicate</b><span>Use the dashboard and story to explain findings and support decisions.</span></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="cta">
+      <div>
+        <div class="eyebrow">View the published work</div>
+        <h2 style="margin-bottom:5px">Continue to Tableau Public</h2>
+        <p class="sub">Open the published dashboard or supporting story in Tableau Public.</p>
+      </div>
+      <div class="actions" style="margin:0">
+        <a class="btn primary" href="https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Dashboard1" target="_blank" rel="noopener">Dashboard ↗</a>
+        <a class="btn" href="https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Story1?publish=yes" target="_blank" rel="noopener">Story 1 ↗</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    EV Market Performance Insights · Tableau Public project<br>
+    <span>Interactive visualisations are embedded from Tableau Public. Project descriptions on this page are intended as an overview of the analysis.</span>
+  </div>
+</footer>
+
+<script>
+  const views = {
+    dashboard: {
+      title: "My EV Market Analysis Dashboard",
+      url: "https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Dashboard1",
+      embed: "https://public.tableau.com/views/EV_Market_analysis_Dashboard/Dashboard1?:showVizHome=no&:embed=true"
+    },
+    story1: {
+      title: "My EV Market Performance Overview · Story 1",
+      url: "https://public.tableau.com/app/profile/oshvi.patidar/viz/EV_Market_analysis_Dashboard/Story1?publish=yes",
+      embed: "https://public.tableau.com/views/EV_Market_analysis_Dashboard/Story1?:showVizHome=no&:embed=true"
+    }
+  };
+
+  const frame = document.getElementById("tableau-frame");
+  const title = document.getElementById("view-title");
+  const open = document.getElementById("open-view");
+
+  document.querySelectorAll(".tab").forEach(button => {
+    button.addEventListener("click", () => {
+      const view = views[button.dataset.view];
+
+      document.querySelectorAll(".tab").forEach(tab =>
+        tab.setAttribute("aria-selected", String(tab === button))
+      );
+
+      frame.src = view.embed;
+      frame.title = view.title;
+      title.textContent = view.title;
+      open.href = view.url;
+    });
+  });
+</script>
+</body>
+</html>
